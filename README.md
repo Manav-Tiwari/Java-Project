@@ -108,8 +108,7 @@ To run this project locally, ensure you have the Java Development Kit (JDK) inst
 ---
 
 ## 📜 License & Acknowledgments
-* **Author:** [Your Name / Registration Number]
-* **Course:** Programming in JAVA (BYOP Capstone)
-* **Institution:** [Your Institution / VIT]
-
+* **Author:** Manav Tiwari
+* **Course:** Programming in JAVA
+* **Institution:** VIT Bhopal University
 *Built with ❤️ and ☕.*
