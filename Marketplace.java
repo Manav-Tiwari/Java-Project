@@ -85,4 +85,61 @@ public class Marketplace {
         System.out.println("-------------------------------------");
     }
 
+    // --- FILE I/O (DATA PERSISTENCE) ---
+
+    // Saves HashMaps and ArrayLists to CSV files
+    public void saveData() {
+        try (PrintWriter userWriter = new PrintWriter(new FileWriter("users.csv"));
+             PrintWriter itemWriter = new PrintWriter(new FileWriter("items.csv"))) {
+            
+            for (User user : users.values()) {
+                userWriter.println(user.getUsername() + "," + user.getCredits());
+            }
+            
+            for (Item item : items) {
+                itemWriter.println(item.getId() + "," + item.getTitle() + "," + item.getPrice() + "," + item.getSellerUsername());
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving data: " + e.getMessage());
+        }
+    }
+
+    // Loads data from CSV files when the program starts
+    public void loadData() {
+        // Load Users
+        try (BufferedReader userReader = new BufferedReader(new FileReader("users.csv"))) {
+            String line;
+            while ((line = userReader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    users.put(parts[0], new User(parts[0], Integer.parseInt(parts[1])));
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No existing user data found. Starting fresh.");
+        } catch (IOException e) {
+            System.out.println("Error loading users: " + e.getMessage());
+        }
+
+        // Load Items
+        try (BufferedReader itemReader = new BufferedReader(new FileReader("items.csv"))) {
+            String line;
+            while ((line = itemReader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 4) {
+                    items.add(new Item(parts[0], parts[1], Integer.parseInt(parts[2]), parts[3]));
+                    
+                    // Keep the ID generator updated so we don't overwrite IDs
+                    int currentIdNum = Integer.parseInt(parts[0].replace("ITEM", ""));
+                    if (currentIdNum >= nextItemId) {
+                        nextItemId = currentIdNum + 1;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No existing item data found. Starting fresh.");
+        } catch (IOException e) {
+            System.out.println("Error loading items: " + e.getMessage());
+        }
+    }
 }
